@@ -6,8 +6,7 @@ import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
-const shows = getCollection('shows').sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
-const first = shows[0];
+const shows = (await getCollection('shows')).sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));const first = shows[0];
 const site = Astro.site!;
 ---
 <Base
