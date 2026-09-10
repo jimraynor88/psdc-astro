@@ -7,6 +7,19 @@ import Footer from '../../../components/Footer.astro';
 import EpisodePlayer from '../../../components/EpisodePlayer.astro';
 import { getCollection, render } from 'astro:content';
 
+export async function getStaticPaths() {
+  const episodes = await getCollection('episodes');
+  return episodes.map(ep => ({
+    params: {
+      show: ep.data.show, // Asumiendo que `ep.data.show` contiene el id del show
+      season: ep.data.season_slug,
+      episode: ep.data.episode_slug,
+    },
+    props: { episode: ep }, // Pasamos el episodio completo como prop
+  }));
+}
+
+
 const { show, season, episode } = Astro.params;
 const shows = getCollection('shows');
 const current = shows.find(s => s.slug === show);
