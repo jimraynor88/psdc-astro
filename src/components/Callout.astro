@@ -1,0 +1,13 @@
+---
+interface Props {
+  type?: string;
+  label?: string;
+}
+const { type = 'info', label } = Astro.props;
+const icons: Record<string, string> = { info: 'ⓘ', note: '✎', tip: '✦', warn: '⚠', quote: '❝' };
+const icon = icons[type] ?? 'ⓘ';
+---
+<div class={`co ${type}`}>
+  <div class="hd">{icon} {label ?? type.toUpperCase()}</div>
+  <div class="bd"><slot /></div>
+</div>
