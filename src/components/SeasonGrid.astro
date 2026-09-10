@@ -1,0 +1,14 @@
+---
+interface Props {
+  seasons: { slug: string; title: string; count: number; current?: boolean }[];
+}
+const { seasons } = Astro.props;
+---
+<div class="seasons">
+  {seasons.map(s => (
+    <a class={`season${s.current ? ' now' : ''}`} href={s.slug}>
+      <div class="n">{s.title.toUpperCase()}</div>
+      <div class="e">{s.count} episodios</div>
+    </a>
+  ))}
+</div>
