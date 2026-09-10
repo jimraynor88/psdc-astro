@@ -1,0 +1,21 @@
+---
+const shows = (await import('astro:content')).getCollection('shows', d => true);
+const sorted = shows.sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+const { pathname } = Astro.url;
+const currentShow = sorted.find(s => pathname.startsWith(`/${s.slug}`));
+---
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="/"><span>PULSO<b>▮</b>ARCHIVO</span><span class="cur">_</span></a>
+    <nav>
+      <a href="/" class={pathname === '/' ? 'on' : ''}>Inicio</a>
+      {sorted.map(s => (
+        <a href={`/${s.slug}/`} class={currentShow?.slug === s.slug ? 'on' : ''}>{s.data.title}</a>
+      ))}
+      <a href="/novedades" class={pathname.startsWith('/novedades') ? 'on' : ''}>Novedades</a>
+      <a href="/bio" class={pathname.startsWith('/bio') ? 'on' : ''}>Bio</a>
+    </nav>
+    <div class="eq"><i></i><i></i><i></i><i></i></div>
+  </div>
+  <div class="spectrum"></div>
+</header>
