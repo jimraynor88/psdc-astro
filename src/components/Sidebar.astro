@@ -1,9 +1,7 @@
 ---
-const { getCollection, render } = await import('astro:content');
-const site = Astro.site!;
+const { getCollection } = await import('astro:content');
 const bioEntries = getCollection('bio');
 const bio = bioEntries[0];
-const bioBody = bio ? await render(bio) : null;
 const novs = getCollection('novedades').sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 4);
 const siteEntry = getCollection('site')[0];
 const links = siteEntry?.data.links ?? [];
