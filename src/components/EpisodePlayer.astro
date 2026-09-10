@@ -1,0 +1,84 @@
+---
+interface Props {
+  audio: string;
+  duration?: string;
+  speed: string[];
+  vtype: string;
+  chapters?: { time: string; label: string }[];
+  audio_alt?: { label: string; url: string }[];
+  video_id?: string;
+}
+const { audio, duration, speed, vtype, chapters, audio_alt, video_id } = Astro.props;
+---
+<audio id="audio" preload="metadata" data-dur={duration ?? '0:00'} src={audio}></audio>
+
+<div class="chips">
+  <span class="chip on">◆ <b>AUDIO</b></span>
+  {audio_alt?.map(h => (
+    <a class="chip" href={h.url} target="_blank" rel="noopener">{h.label} <b>↗</b></a>
+  ))}
+  {video_id && <span class="chip">🎬 <b>video (YT)</b></span>}
+</div>
+
+<div class="player">
+  <div class="visuals">
+    <div class="viz v-vinyl"><div class="vinyl"><div class="label"><span>33⅓</span></div></div></div>
+    <div class="viz v-speaker"><div class="spk"><div class="ring"></div><div class="ring"></div><div class="cone"></div></div></div>
+    <div class="viz v-mic"><div class="mic"><div class="ring"></div><div class="ring r2"></div><div class="capsule"></div><div class="stem"></div><div class="base"></div></div></div>
+    <div class="viz v-tv"><div class="crt"><span class="live">● ON AIR</span><div class="bars" id="tvbars"></div></div></div>
+  </div>
+  <div style="min-width:0">
+    <div class="prow">
+      <button class="btn" id="prevCh" title="marca anterior">⏮</button>
+      <button class="btn big" id="playBtn" title="play/pause">▶</button>
+      <button class="btn" id="nextCh" title="marca siguiente">⏭</button>
+      <div class="time"><b id="tCur">00:00</b> / <span id="tTot">{duration ?? '--:--'}</span></div>
+    </div>
+    <div class="prow" style="margin-top:8px">
+      <input type="range" id="seek" min="0" max="0" value="0" step="1">
+    </div>
+    <div class="trow">
+      <span class="lbl">Velocidad</span>
+      <div class="speeds">
+        {speed.map(s => (
+          <button class={`sp${s === '1' ? ' on' : ''}`} data-speed={s}>{s}x</button>
+        ))}
+      </div>
+    </div>
+    <div class="trow">
+      <span class="lbl">Visual</span>
+      <div class="vt">
+        {['vinyl','speaker','mic','tv'].map(v => (
+          <button class={`tgl${v === vtype ? ' on' : ''}`} data-v={`v-${v}`}>{v}</button>
+        ))}
+      </div>
+      <span class="lbl" style="margin-left:8px">FX</span>
+      <button class="tgl on" id="fxToggle">espectro ✓</button>
+    </div>
+  </div>
+</div>
+<canvas id="viz" height="56"></canvas>
+
+{video_id && (
+  <>
+    <div class="video" style="display:grid">
+      <iframe src={`https://www.youtube-nocookie.com/embed/${video_id}`} title="Video del episodio" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+    <div class="co info"><div class="hd">ⓘ Info</div><div class="bd">Con vídeo de YouTube el visualizador de frecuencias se muestra <b>simulado</b>.</div></div>
+  </>
+)}
+
+{chapters && chapters.length > 0 && (
+  <div style="margin-top:16px">
+    <h3>Marcas del audio</h3>
+    <ul class="chap" id="chapters">
+      {chapters.map(c => {
+        const [m, s] = c.time.split(':').map(Number);
+        const secs = m * 60 + s;
+        return <li data-t={secs}><span class="t">{c.time}</span><span class="l">{c.label}</span></li>;
+      })}
+    </ul>
+  </div>
+)}
+
+<script src="/js/main.js"></script>
