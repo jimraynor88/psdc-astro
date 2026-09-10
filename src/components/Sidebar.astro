@@ -1,0 +1,63 @@
+---
+const { getCollection, render } = await import('astro:content');
+const site = Astro.site!;
+const bioEntries = getCollection('bio');
+const bio = bioEntries[0];
+const bioBody = bio ? await render(bio) : null;
+const novs = getCollection('novedades').sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 4);
+const siteEntry = getCollection('site')[0];
+const links = siteEntry?.data.links ?? [];
+const { pathname } = Astro.url;
+const shows = getCollection('shows');
+const currentShow = shows.find(s => pathname.startsWith(`/${s.slug}`));
+---
+<aside class="side">
+  <div class="card"><div class="card-bd" style="padding:16px">
+    <h3>Quién es quién</h3>
+    <div class="bio">
+      <div class="avatar">{bio?.data.avatar_char ?? 'P'}</div>
+      <div>
+        <a href="/bio" style="font-weight:600">{bio?.data.name ?? 'DJ Pulsar'}</a>
+        <p>{bio?.data.description ?? ''}</p>
+      </div>
+    </div>
+  </div></div>
+
+  {currentShow && (
+    <div class="card"><div class="card-bd" style="padding:16px">
+      <h3>Info del podcast</h3>
+      <div class="kv">
+        {currentShow.data.author && <><span class="k">CREADOR</span><span class="v">{currentShow.data.author}</span></>}
+        {currentShow.data.language && <><span class="k">IDIOMA</span><span class="v">{currentShow.data.language}</span></>}
+        {currentShow.data.license && <><span class="k">LICENCIA</span><span class="v">{currentShow.data.license}</span></>}
+        {currentShow.data.frequency && <><span class="k">FREC.</span><span class="v">{currentShow.data.frequency}</span></>}
+        {currentShow.data.format && <><span class="k">FORMATO</span><span class="v">{currentShow.data.format}</span></>}
+      </div>
+      <div style="margin-top:12px">
+        <a class="chip" href={`/${currentShow.slug}/feed.xml`}>RSS <b>↗</b></a>
+      </div>
+    </div></div>
+  )}
+
+  <div class="card"><div class="card-bd" style="padding:16px">
+    <h3>Novedades</h3>
+    <ul class="news">
+      {novs.map(n => (
+        <li>
+          <span class="d">{n.data.date.toISOString().slice(0, 10)}</span>
+          <div class="t">{n.data.title}</div>
+          <p>{n.data.description ?? ''}</p>
+        </li>
+      ))}
+    </ul>
+  </div></div>
+
+  <div class="card"><div class="card-bd" style="padding:16px">
+    <h3>Enlaces externos</h3>
+    <ul class="links">
+      {links.map(l => (
+        <li><a href={l.url} target="_blank" rel="noopener">{l.label}</a> <span class="d">{l.desc ?? ''}</span></li>
+      ))}
+    </ul>
+  </div></div>
+</aside>
