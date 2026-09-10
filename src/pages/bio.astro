@@ -1,13 +1,14 @@
 ---
+import { getCollection } from 'astro:content';
+import { renderMarkdown } from 'astro/markdown';
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import ShowSwitcher from '../components/ShowSwitcher.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Footer from '../components/Footer.astro';
-import { getCollection, render } from 'astro:content';
 
 const bio = getCollection('bio')[0];
-const { Content } = bio ? await render(bio) : { Content: () => null };
+const md = bio?.data.body ? await renderMarkdown(bio.data.body) : null;
 const shows = getCollection('shows');
 const first = shows[0];
 ---
@@ -28,7 +29,7 @@ const first = shows[0];
   <main>
     <div>
       <div class="card">
-        <div class="card-bd md"><Content /></div>
+        {md ? <div class="card-bd md" set:html={md.html} /> : ''}
       </div>
     </div>
     <Sidebar />
