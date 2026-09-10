@@ -1,0 +1,74 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import ShowSwitcher from '../../../components/ShowSwitcher.astro';
+import Sidebar from '../../../components/Sidebar.astro';
+import Footer from '../../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const { show, season } = Astro.params;
+const shows = getCollection('shows');
+const current = shows.find(s => s.slug === show);
+if (!current) return Astro.redirect('/');
+
+const allEps = getCollection('episodes', d => d.data.show === show);
+const eps = allEps.filter(e => e.data.season_slug === season);
+const sorted = [...eps].sort((a, b) => a.data.episode_num - b.data.episode_num);
+
+// todas las temporadas para el grid
+const seasonMap = new Map<string, number>();
+allEps.forEach(ep => {
+  seasonMap.set(ep.data.season_slug, (seasonMap.get(ep.data.season_slug) ?? 0) + 1);
+});
+const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
+  slug: `/${show}/${slug}/`,
+  title: `Temporada ${i + 1}`,
+  count,
+  current: slug === season,
+}));
+---
+<Base
+  title={`Temporada ${season} · ${current.data.title} · PULSO ARCHIVO`}
+  accent={current.data.accent}
+  accent2={current.data.accent2}
+  visual={current.data.visual}
+>
+<Header />
+<div class="wrap">
+  <ShowSwitcher />
+  <section class="hero">
+    <div class="kicker">{current.data.kicker ?? current.data.title}</div>
+    <h1><span>{current.data.title}</span> <em>{current.data.nav_sub ?? '// archive'}</em></h1>
+    <p>Temporada {season} · {sorted.length} episodios</p>
+    <div class="badges">
+      <a class="badge" href={`/${show}/feed.xml`}>RSS ↗</a>
+    </div>
+  </section>
+  <main>
+    <div>
+      <div class="card">
+        <div class="card-hd"><h2>{`Temporada ${season}`}</h2><span class="sub">{sorted.length} episodios</span></div>
+        <div class="card-bd ep-list">
+          {sorted.map(ep => (
+            <a class="ep" href={`/${show}/${season}/${ep.data.episode_slug}`}>
+              <span class="num">T{ep.data.season_num}.{ep.data.episode_num}</span>
+              <span>
+                <span class="t">{ep.data.title}</span>
+                <span class="d" style="display:block">
+                  {ep.data.date.toISOString().slice(0, 10)}
+                  {ep.data.duration && ` · ${ep.data.duration}`}
+                  {ep.data.video_id && ' · 🎬'}
+                </span>
+              </span>
+              <span class="d" style="color:var(--acc)">→</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <a href={`/${show}/feed.xml`} class="rssline">RSS de todo el podcast ↗</a>
+    </div>
+    <Sidebar />
+  </main>
+</div>
+<Footer />
+</Base>
