@@ -11,7 +11,7 @@ const first = shows[0];
 const site = Astro.site!;
 ---
 <Base
-  title="PULSO ARCHIVO"
+  title="PURO SONIDO DE CLUB"
   description="Archivo y difusión de techno, trance, eurodance y hard-house."
   accent={first?.data.accent ?? '#53c8ff'}
   accent2={first?.data.accent2 ?? '#2b6bff'}
@@ -22,8 +22,8 @@ const site = Astro.site!;
   <ShowSwitcher />
   <section class="hero">
     <div class="kicker">dance music · archivo · difusión</div>
-    <h1>PULSO <em>ARCHIVO</em></h1>
-    <p>Archivo y difusión de techno, trance, eurodance y hard-house de finales de los 90 y los 2000. Ediciones originales, promos y rarezas, restauradas.</p>
+<h1>Puro Sonido <em>de Club</em></h1>
+<p>Archivo y difusión de techno, trance, eurodance y hard-house de finales de los 90 y los 2000. Ediciones originales, promos y rarezas, restauradas.</p>
     <div class="badges">
       {shows.map(s => (
         <a class="badge acc" href={`/${s.slug}/`}>{s.data.title.toUpperCase()}</a>
