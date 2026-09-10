@@ -7,7 +7,7 @@ import keystatic from '@keystatic/astro';
 
 export default defineConfig({
   site: 'https://pod.jim88.de',
-  output: 'hybrid',                    // ← cambio clave
+  output: 'static',                    // ← cambio clave
   adapter: cloudflare({
     platformProxy: { enabled: true },  // ← necesario para que el adapter detecte bindings en dev
   }),
