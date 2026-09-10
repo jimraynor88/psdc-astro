@@ -21,7 +21,6 @@ const vtype = ep.data.type ?? current.data.visual ?? 'vinyl';
 const siteEntry = getCollection('site')[0];
 const speeds = siteEntry?.data.speeds ?? ['0.88','1','1.10','1.15','1.19','1.28','1.55','1.82','2.18','2.81'];
 
-// temporadas para el grid
 const seasonMap = new Map<string, number>();
 allEps.forEach(e => seasonMap.set(e.data.season_slug, (seasonMap.get(e.data.season_slug) ?? 0) + 1));
 const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
@@ -63,7 +62,6 @@ const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
           <div class="card-bd">
             <h3 style="font-size:21px;margin-bottom:4px">{ep.data.title}</h3>
             <p style="color:var(--muted);font-size:13.5px;margin-bottom:16px">{ep.data.description ?? ''}</p>
-
             <div class="meta">
               <div><div class="k">Temporada</div><div class="v a">{String(ep.data.season_num).padStart(2,'0')}</div></div>
               <div><div class="k">Episodio</div><div class="v">{ep.data.episode_num}</div></div>
@@ -74,7 +72,6 @@ const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
               {ep.data.bpm && <div><div class="k">BPM</div><div class="v a">{ep.data.bpm}</div></div>}
               {ep.data.genre && <div><div class="k">Género</div><div class="v">{ep.data.genre}</div></div>}
             </div>
-
             <EpisodePlayer
               audio={ep.data.audio}
               duration={ep.data.duration}
@@ -101,9 +98,7 @@ const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
           </div>
         </div>
       </div>
-    </div>
 
-    <div>
       <div class="card">
         <div class="card-hd"><h2>Show notes</h2><span class="sub">markdown completo</span></div>
         <div class="card-bd md">
@@ -114,6 +109,7 @@ const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
         </div>
       </div>
     </div>
+    <Sidebar />
   </main>
 </div>
 <Footer />
