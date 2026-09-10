@@ -6,7 +6,13 @@ interface Props {
   accent2?: string;
   visual?: string;
 }
-const { title = 'PSdC — Puro Sonido de Club', ... } = Astro.props;
+const {
+  title = 'PSdC — Puro Sonido de Club',
+  description = '',
+  accent = '#53c8ff',
+  accent2 = '#2b6bff',
+  visual = 'vinyl',
+} = Astro.props;
 const site = Astro.site!;
 ---
 <!doctype html>
@@ -17,7 +23,7 @@ const site = Astro.site!;
   <title>{title}</title>
   <meta name="description" content={description}>
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="alternate" type="application/rss+xml" title="PULSO ARCHIVO" href={new URL('/feed.xml', site)}>
+  <link rel="alternate" type="application/rss+xml" title="PSdC" href={new URL('/feed.xml', site)}>
 </head>
 <body class="v-{visual}" style="--acc:{accent};--acc2:{accent2}">
   <slot />
