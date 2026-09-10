@@ -19,8 +19,7 @@ export default config({
       path: 'src/content/site',
       format: { data: 'yaml' },
       schema: {
-        title: fields.text({ label: 'Título del sitio', defaultValue: 'PULSO ARCHIVO' }),
-        description: fields.text({ label: 'Descripción', multiline: true, defaultValue: 'Archivo y difusión de techno, trance, eurodance y hard-house.' }),
+        fields.text({ label: 'Título del sitio', defaultValue: 'PSdC — Puro Sonido de Club' }),        description: fields.text({ label: 'Descripción', multiline: true, defaultValue: 'Archivo y difusión de techno, trance, eurodance y hard-house.' }),
         tagline: fields.text({ label: 'Tagline (mono, kicker)', defaultValue: 'dance music · archivo · difusión' }),
         speeds: fields.array(fields.text({ label: 'Velocidad' }), {
           label: 'Velocidades del player',
