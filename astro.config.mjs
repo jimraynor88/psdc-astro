@@ -5,7 +5,7 @@ import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
 
 export default defineConfig({
-  site: 'https://PULSO-ARCHIVO.workers.dev', // ← tu workers.dev real
+  site: 'https://pod.jim88.de', // ← tu workers.dev real
   output: 'server',                          // ← SSR total: lo que pide Keystatic
   adapter: cloudflare(),
   integrations: [react(), markdoc(), keystatic()],
