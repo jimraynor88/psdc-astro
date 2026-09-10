@@ -1,0 +1,120 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import ShowSwitcher from '../../../components/ShowSwitcher.astro';
+import Sidebar from '../../../components/Sidebar.astro';
+import Footer from '../../../components/Footer.astro';
+import EpisodePlayer from '../../../components/EpisodePlayer.astro';
+import { getCollection, render } from 'astro:content';
+
+const { show, season, episode } = Astro.params;
+const shows = getCollection('shows');
+const current = shows.find(s => s.slug === show);
+if (!current) return Astro.redirect('/');
+
+const allEps = getCollection('episodes', d => d.data.show === show);
+const ep = allEps.find(e => e.data.season_slug === season && e.data.episode_slug === episode);
+if (!ep) return Astro.redirect(`/${show}/`);
+
+const { Content } = await render(ep);
+const vtype = ep.data.type ?? current.data.visual ?? 'vinyl';
+const siteEntry = getCollection('site')[0];
+const speeds = siteEntry?.data.speeds ?? ['0.88','1','1.10','1.15','1.19','1.28','1.55','1.82','2.18','2.81'];
+
+// temporadas para el grid
+const seasonMap = new Map<string, number>();
+allEps.forEach(e => seasonMap.set(e.data.season_slug, (seasonMap.get(e.data.season_slug) ?? 0) + 1));
+const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
+  slug: `/${show}/${slug}/`,
+  title: `Temporada ${i + 1}`,
+  count,
+  current: slug === season,
+}));
+---
+<Base
+  title={`${ep.data.title} · PULSO ARCHIVO`}
+  description={ep.data.description ?? ''}
+  accent={current.data.accent}
+  accent2={current.data.accent2}
+  visual={vtype}
+>
+<Header />
+<div class="wrap">
+  <ShowSwitcher />
+  <section class="hero">
+    <div class="kicker">{current.data.kicker ?? current.data.title}</div>
+    <h1><span>{current.data.title}</span> <em>{current.data.nav_sub ?? '// archive'}</em></h1>
+    <p>{current.data.description ?? ''}</p>
+    <div class="badges">
+      {current.data.badge && <span class="badge acc">{current.data.badge.toUpperCase()}</span>}
+      {ep.data.video_id ? <span class="badge">AUDIO + VIDEO</span> : <span class="badge">AUDIO</span>}
+      <a class="badge" href={`/${show}/feed.xml`}>RSS ↗</a>
+    </div>
+  </section>
+
+  <main>
+    <div>
+      {ep.data.audio && (
+        <div class="card">
+          <div class="card-hd">
+            <h2>Episodio</h2>
+            <span class="sub">T{ep.data.season_num}.{ep.data.episode_num} · tipo: <b style="color:var(--acc)">{vtype}</b></span>
+          </div>
+          <div class="card-bd">
+            <h3 style="font-size:21px;margin-bottom:4px">{ep.data.title}</h3>
+            <p style="color:var(--muted);font-size:13.5px;margin-bottom:16px">{ep.data.description ?? ''}</p>
+
+            <div class="meta">
+              <div><div class="k">Temporada</div><div class="v a">{String(ep.data.season_num).padStart(2,'0')}</div></div>
+              <div><div class="k">Episodio</div><div class="v">{ep.data.episode_num}</div></div>
+              <div><div class="k">Publicado</div><div class="v">{ep.data.date.toISOString().slice(0, 10)}</div></div>
+              {ep.data.duration && <div><div class="k">Duración</div><div class="v">{ep.data.duration}</div></div>}
+              {ep.data.author && <div><div class="k">Autor</div><div class="v">{ep.data.author}</div></div>}
+              {ep.data.original_date && <div><div class="k">Fecha original</div><div class="v">{ep.data.original_date}</div></div>}
+              {ep.data.bpm && <div><div class="k">BPM</div><div class="v a">{ep.data.bpm}</div></div>}
+              {ep.data.genre && <div><div class="k">Género</div><div class="v">{ep.data.genre}</div></div>}
+            </div>
+
+            <EpisodePlayer
+              audio={ep.data.audio}
+              duration={ep.data.duration}
+              speed={speeds}
+              vtype={vtype}
+              chapters={ep.data.chapters}
+              audio_alt={ep.data.audio_alt}
+              video_id={ep.data.video_id}
+            />
+          </div>
+        </div>
+      )}
+
+      <div class="card">
+        <div class="card-hd"><h2>Temporadas</h2><span class="sub">{seasons.length} temporadas</span></div>
+        <div class="card-bd">
+          <div class="seasons">
+            {seasons.map(s => (
+              <a class={`season${s.current ? ' now' : ''}`} href={s.slug}>
+                <div class="n">{s.title.toUpperCase()}</div>
+                <div class="e">{s.count} episodios</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-hd"><h2>Show notes</h2><span class="sub">markdown completo</span></div>
+        <div class="card-bd md">
+          {current.data.boilerplate && ep.data.boilerplate !== false && (
+            <div class="co note"><div class="hd">✎ Nota recurrente</div><div class="bd">{current.data.boilerplate}</div></div>
+          )}
+          <Content />
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<Footer />
+</Base>
