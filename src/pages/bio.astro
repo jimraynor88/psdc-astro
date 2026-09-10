@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ShowSwitcher from '../components/ShowSwitcher.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+
+const bio = getCollection('bio')[0];
+const { Content } = bio ? await render(bio) : { Content: () => null };
+const shows = getCollection('shows');
+const first = shows[0];
+---
+<Base
+  title="Bio · PULSO ARCHIVO"
+  accent={first?.data.accent ?? '#53c8ff'}
+  accent2={first?.data.accent2 ?? '#2b6bff'}
+  visual={first?.data.visual ?? 'vinyl'}
+>
+<Header />
+<div class="wrap">
+  <ShowSwitcher />
+  <section class="hero">
+    <div class="kicker">quiénes somos</div>
+    <h1><span>{bio?.data.name ?? 'DJ Pulsar'}</span></h1>
+    <p>{bio?.data.description ?? ''}</p>
+  </section>
+  <main>
+    <div>
+      <div class="card">
+        <div class="card-bd md"><Content /></div>
+      </div>
+    </div>
+    <Sidebar />
+  </main>
+</div>
+<Footer />
+</Base>
