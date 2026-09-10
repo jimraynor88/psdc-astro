@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ShowSwitcher from '../components/ShowSwitcher.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const shows = getCollection('shows').sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+const first = shows[0];
+const site = Astro.site!;
+---
+<Base
+  title="PULSO ARCHIVO"
+  description="Archivo y difusión de techno, trance, eurodance y hard-house."
+  accent={first?.data.accent ?? '#53c8ff'}
+  accent2={first?.data.accent2 ?? '#2b6bff'}
+  visual={first?.data.visual ?? 'vinyl'}
+>
+<Header />
+<div class="wrap">
+  <ShowSwitcher />
+  <section class="hero">
+    <div class="kicker">dance music · archivo · difusión</div>
+    <h1>PULSO <em>ARCHIVO</em></h1>
+    <p>Archivo y difusión de techno, trance, eurodance y hard-house de finales de los 90 y los 2000. Ediciones originales, promos y rarezas, restauradas.</p>
+    <div class="badges">
+      {shows.map(s => (
+        <a class="badge acc" href={`/${s.slug}/`}>{s.data.title.toUpperCase()}</a>
+      ))}
+      <a class="badge" href="/feed.xml">RSS ↗</a>
+    </div>
+  </section>
+  <main>
+    <div>
+      <div class="card">
+        <div class="card-hd"><h2>Podcasts</h2><span class="sub">{shows.length} shows</span></div>
+        <div class="card-bd" style="display:grid;gap:12px">
+          {shows.map(s => (
+            <a class="pcard" style={`--pc:${s.data.accent}`} href={`/${s.slug}/`}>
+              <div class="kick">{s.data.kicker ?? ''}</div>
+              <h3>{s.data.title}</h3>
+              <p>{s.data.description ?? ''}</p>
+              <span class="go">ENTRAR → {(s.data.badge ?? '').toUpperCase()}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+    <Sidebar />
+  </main>
+</div>
+<Footer />
+</Base>
