@@ -10,7 +10,7 @@ export default config({
     branchPrefix: '',
   },
   ui: {
-    brand: { name: 'PULSO ARCHIVO Admin' },
+    brand: { name: 'PSdC Admin' },
   },
 
   singletons: {
