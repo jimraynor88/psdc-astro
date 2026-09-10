@@ -1,11 +1,12 @@
 ---
-const shows = (await import('astro:content')).getCollection('shows', d => true);
-const sorted = shows.sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
+const { getCollection } = await import('astro:content');
+const shows = getCollection('shows');
+const sorted = [...shows].sort((a, b) => (a.data.weight ?? 99) - (b.data.weight ?? 99));
 const { pathname } = Astro.url;
 const current = sorted.find(s => pathname.startsWith(`/${s.slug}`));
 ---
 <div class="switch">
   {sorted.map(s => (
-    <a class={`tab${current?.slug === s.slug ? ' on' : ''}`} href={`/${s.slug}/`}>{s.data.title | upper}</a>
+    <a class={`tab${current?.slug === s.slug ? ' on' : ''}`} href={`/${s.slug}/`}>{s.data.title.toUpperCase()}</a>
   ))}
 </div>
