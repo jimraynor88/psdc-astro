@@ -11,7 +11,7 @@ const shows = await getCollection('shows');
 const current = shows.find(s => s.slug === show);
 if (!current) return Astro.redirect('/');
 
-const allEpisodes = getCollection('episodes', d => d.data.show === show);
+const allEpisodes = await getCollection('episodes', d => d.data.show === show);
 // agrupar por season_slug
 const seasonMap = new Map<string, typeof allEpisodes>();
 allEpisodes.forEach(ep => {
