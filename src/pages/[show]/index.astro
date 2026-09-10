@@ -13,7 +13,8 @@ export async function getStaticPaths() {
 
 const { show } = Astro.params;
 const shows = await getCollection('shows');
-const current = shows.find(s => s.slug === show);
+const current = shows.find(s => s.id === show);     // ✅
+
 if (!current) return Astro.redirect('/');
 
 const allEpisodes = await getCollection('episodes', d => d.data.show === show);
