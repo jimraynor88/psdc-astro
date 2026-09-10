@@ -37,16 +37,16 @@ export default config({
       },
     }),
     bio: singleton({
-      label: 'Bio / Perfil',
-      path: 'src/content/bio',
-      format: { contentField: 'body' },
-      schema: {
-        name:        fields.text({ label: 'Nombre artístico', defaultValue: 'DJ Pulsar' }),
-        avatar_char: fields.text({ label: 'Inicial del avatar', defaultValue: 'P' }),
-        description: fields.text({ label: 'Descripción corta', multiline: true }),
-        body:        fields.markdoc({ label: 'Bio completa' }),
-      },
-    }),
+  label: 'Bio / Perfil',
+  path: 'src/content/bio',
+  format: { data: 'yaml' },
+  schema: {
+    name:        fields.text({ label: 'Nombre artístico', defaultValue: 'DJ-DuRaN' }),
+    avatar_char: fields.text({ label: 'Inicial del avatar', defaultValue: 'D' }),
+    description: fields.text({ label: 'Descripción corta', multiline: true }),
+    body:        fields.text({ label: 'Bio completa', multiline: true }),
+  },
+}),
   },
 
   collections: {
