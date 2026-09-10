@@ -18,7 +18,7 @@ export async function getStaticPaths() {
     props: { episode: ep }, // Pasamos el episodio completo como prop
   }));
 }
-
+const { episode } = Astro.props;
 
 const { show, season, episode } = Astro.params;
 const shows = getCollection('shows');
@@ -44,7 +44,7 @@ const seasons = [...seasonMap.entries()].map(([slug, count], i) => ({
 }));
 ---
 <Base
-  title={`${ep.data.title} · PULSO ARCHIVO`}
+  title={`${ep.data.title} · PSdC`}
   description={ep.data.description ?? ''}
   accent={current.data.accent}
   accent2={current.data.accent2}
