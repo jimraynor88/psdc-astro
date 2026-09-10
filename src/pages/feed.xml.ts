@@ -3,7 +3,7 @@ import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 
 export async function GET(context: APIContext) {
-  const episodes = getCollection('episodes', d => !!d.data.audio);
+const episodes = await getCollection('episodes', d => !!d.data.audio);
   const site = Astro.site!;
   return rss({
     title: 'PULSO ARCHIVO',
