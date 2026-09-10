@@ -8,8 +8,13 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const shows = await getCollection('shows');
-  return shows.map(s => ({ params: { show: s.id } }));
+  return shows.map(s => ({
+    params: { show: s.id }, // En la Content Layer API se usa `id`, no `slug`[reference:2]
+    props: { currentShow: s } // Pasamos el objeto completo como prop
+  }));
 }
+
+const { currentShow } = Astro.props; // Recibimos el show como prop
 
 const { show } = Astro.params;
 const shows = await getCollection('shows');
