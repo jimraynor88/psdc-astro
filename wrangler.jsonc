@@ -8,7 +8,7 @@
     "directory": "./dist"
   },
   "kv_namespaces": [
-    { "binding": "KV", "id": "78e107b36cc3496f92bbcb562ff232f4" }
+    { "binding": "SESSION", "id": "78e107b36cc3496f92bbcb562ff232f4" }
   ],
   "observability": { "enabled": true }
 }
