@@ -1,0 +1,24 @@
+title: PURO SONIDO DE CLUB
+description: 'Archivo y difusión de techno, trance, eurodance y hard-house de finales de los 90 y los 2000.'
+tagline: 'dance music · archivo · difusión'
+speeds:
+  - '0.88'
+  - '1'
+  - '1.10'
+  - '1.15'
+  - '1.19'
+  - '1.28'
+  - '1.55'
+  - '1.82'
+  - '2.18'
+  - '2.81'
+links:
+  - label: Bandcamp
+    url: 'https://bandcamp.com/tu-usuario'
+    desc: tienda / extras
+  - label: archive.org
+    url: 'https://archive.org/details/tu-archivo'
+    desc: espejo de audio
+  - label: Discord
+    url: 'https://discord.gg/tu-servidor'
+    desc: comunidad
