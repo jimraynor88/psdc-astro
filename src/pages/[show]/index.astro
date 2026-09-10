@@ -7,7 +7,7 @@ import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
 const { show } = Astro.params;
-const shows = getCollection('shows');
+const shows = await getCollection('shows');
 const current = shows.find(s => s.slug === show);
 if (!current) return Astro.redirect('/');
 
