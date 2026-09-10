@@ -4,8 +4,8 @@ export default config({
   storage: {
     kind: 'github',
     repo: {
-      owner: 'TU-USUARIO',   // ← CAMBIAR
-      name: 'TU-REPO',       // ← CAMBIAR
+      owner: 'jimraynor88',   // ← CAMBIAR
+      name: 'psdc-astro',       // ← CAMBIAR
     },
     branchPrefix: '',
   },
