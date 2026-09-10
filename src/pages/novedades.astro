@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import ShowSwitcher from '../components/ShowSwitcher.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const novs = getCollection('novedades').sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const shows = getCollection('shows');
+const first = shows[0];
+---
+<Base
+  title="Novedades · PULSO ARCHIVO"
+  accent={first?.data.accent ?? '#53c8ff'}
+  accent2={first?.data.accent2 ?? '#2b6bff'}
+  visual={first?.data.visual ?? 'vinyl'}
+>
+<Header />
+<div class="wrap">
+  <ShowSwitcher />
+  <section class="hero">
+    <div class="kicker">últimas novedades</div>
+    <h1><span>NOVEDADES</span></h1>
+    <p>{novs.length} novedades</p>
+  </section>
+  <main>
+    <div>
+      <div class="card">
+        <div class="card-bd ep-list">
+          {novs.map(n => (
+            <div class="ep">
+              <span class="num">{n.data.date.toISOString().slice(0, 10)}</span>
+              <span>
+                <span class="t">{n.data.title}</span>
+                <span class="d" style="display:block">{n.data.description ?? ''}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    <Sidebar />
+  </main>
+</div>
+<Footer />
+</Base>
